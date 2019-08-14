@@ -1,10 +1,12 @@
 const express = require('express');
-
-
-
-
+const mongoose = require('mongoose');
 
 const app = express();
+
+mongoose.connect('mongodb:localhost:27017/ecom', { useNewUrlParser : true, useCreateIndex : true }, (err)=>{
+    if (err) throw err;
+    console.log('Database is connected');
+})
 
 
 
