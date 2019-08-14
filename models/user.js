@@ -45,4 +45,4 @@ userSchema.methods.comparePass = function(uipassword){
     bcrypt.compare(uipassword,this.password)
 }
 
-module.exports = mongoose.model('User_model',userSchema);
+module.exports = mongoose.model('User',userSchema);
