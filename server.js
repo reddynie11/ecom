@@ -1,6 +1,11 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const ejs = require('ejs');
+const ejs_mate = require('ejs-mate');
+const session = require('express-session');
+const cookieParser = require('cookie-parser');
+const flash = require('express-flash');
 
 //models
 const User = require('./models/user');
@@ -13,32 +18,26 @@ mongoose.connect('mongodb://localhost:27017/ecom', { useNewUrlParser : true, use
 })
 
 //middleware
+app.use(express.static('public'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended:true }));
+app.use(cookieParser());
+app.use(session({
+    resave:true,
+    saveUniinitialized:true,
+    secret:'SUPER'
+}));
+app.use(flash());
+app.engine('ejs', ejs_mate);
+app.set('view engine','ejs' )
 
-app.post('/register', (req,res,next)=>{
-    const newUser = new User();
-
-    newUser.email = req.body.email;
-    newUser.password = req.body.password;
-    newUser.profile.name = req.body.name;
-    newUser.save((err)=>{
-        if (err) next(err);
-        res.send('User created succesfully')
-    })
-})
-
-
-
+//routes
+const mainRoute = require('./routes/main.js');
+const userRoute=require('./routes/user.js');
 
 
-
-
-
-
-
-
-
+app.use(mainRoute)
+app.use('/user', userRoute);
 
 
 
